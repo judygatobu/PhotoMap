@@ -14,8 +14,11 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
 
     
-@IBOutlet weak var MapView: MkMapView!
-    
+    @IBOutlet weak var MapView: MKMapView!
+
+     var photoAnotation:PhotoAnnotation?
+    @IBOutlet weak var cameraButton: UIImageView!
+
     
     var image: UIImage!
     
@@ -25,7 +28,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.delegate = self;
+        MapView.delegate = self;
         
         navigationController?.navigationBar.backgroundColor = UIColor.white
         navigationItem.title = "Map View";
@@ -39,7 +42,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         
         // Create an outlet for the MapView to set its initial visible region to San Francisco //
         let sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1))
-        mapView.setRegion(sfRegion, animated: false)
+        MapView.setRegion(sfRegion, animated: false)
     
     
     
@@ -49,9 +52,9 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         let vc = UIImagePickerController()
         vc.delegate = self
         vc.allowsEditing = true
-        vc.sourceType = UIImagePickerControllerSourceType.camera
+        vc.sourceType = UIImagePickerControllerSourceType.photoLibrary
 
-        self.present(vc, animated: true, completion: nil)
+     //   self.present(vc, animated: true, completion: nil)
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             print("Camera is available 📸")
@@ -75,9 +78,13 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         self.image = editedImage;
         
         // Dismiss UIImagePickerController to go back to your original view controller
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: {
+            
+               self.performSegue(withIdentifier: "tagSegue", sender: self)
+            
+        })
         
-        performSegue(withIdentifier: "tagSegue", sender: nil)
+       
         
     }
     
@@ -86,27 +93,45 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         // Dispose of any resources that can be recreated.
     }
     
-    func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber, locationName: String) {
+   func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber, locationName: String) {
         
-        // pop the LocationsViewController from the view stack and show the PhotoMapViewController
-        self.navigationController?.popViewController(animated: true)
+    self.navigationController?.popViewController(animated: true)
+    
+    
+    
+    let locationCoordinate = CLLocationCoordinate2D(latitude: latitude as! Double, longitude: longitude as! Double)
+    
+    //  save image and coordonate
+    self.photoAnotation = PhotoAnnotation(photo: self.image!, coordinate: locationCoordinate, title: "cool")
+    
+    self.addAnnotationAtCoordinate(coordinate: locationCoordinate)
+    
+    
+    }
+    
+    
+    func addAnnotationAtCoordinate(coordinate: CLLocationCoordinate2D) {
         
-        // Get the location coordinates from the Lat. and Long. passed from the delegate/protocol
-        let locationCoordinate2D = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude));
-        
-        let annotation = PhotoAnnotation();
-        
-        // set the coordinates of that point using the coordinate defined above
-        annotation.coordinate = locationCoordinate2D
-        
-        annotation.title = locationName;
-        
-        // add the annotation to the MKMapView
-        annotations.append(annotation)
-        
-        mapView.addAnnotations(annotations);
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = self.photoAnotation?.title
         
         
+        self.MapView.addAnnotation(annotation)
+        //  self.MapView.showAnnotations([annotation], animated: true)
+        self.MapView.selectAnnotation(annotation, animated: true)
+    }
+    
+    
+    
+    func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
+        //      self.navigationController?.popViewController(animated: true)
+        
+        // Get the first view controller in the navigation controller's collection -
+        // This is the root view controller
+        //   self.navigationController?.popToViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+        
+        //  navigationController!.popToViewController(navigationController!.viewControllers[2] as! LocationsViewController, animated: false)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -135,7 +160,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         
         let index = annotations.count - 1;
         
-        self.annotations[index].photo = thumbnail;
+       annotationView?.image = thumbnail
 
         
             return annotationView
@@ -145,13 +170,28 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
      
         // Pass the selected object to the new view controller.
         
-        let vc = segue.destination as! LocationsViewController;
-        vc.delegate = self;
+     //   let vc = segue.destination as! LocationsViewController;
+      //  vc.delegate_locationsPickedLocation = self;
+        
+        
+        if segue.identifier == "tagSegue" {
+            if let destinationViewController = segue.destination as? LocationsViewController{
+                
+                //set delegate of protocol in location view controller
+                destinationViewController.delegate_locationsPickedLocation = self
+            }
+        }
+        
+        if segue.identifier == "fullImageSegue" {
+            let destinationViewController = segue.destination as? FullImageViewController
+            
+         //   destinationViewController = self.photoAnotation
+        }
 
         
         

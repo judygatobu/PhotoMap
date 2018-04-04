@@ -35,7 +35,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="aPF-0T-Ydb"/>
                     <connections>
-                        <segue destination="eZf-Nb-6PU" kind="push" identifier="LocationView" id="Tzv-N2-17x"/>
+                        <outlet property="MapView" destination="aKy-Uk-sZQ" id="Dw3-v4-hTs"/>
+                        <outlet property="cameraButton" destination="Dgu-70-8oe" id="dsy-mQ-5PW"/>
+                        <segue destination="eZf-Nb-6PU" kind="push" identifier="tagSegue" id="Tzv-N2-17x"/>
                         <segue destination="WeT-38-qba" kind="push" identifier="fullImageSegue" id="B5X-dM-HfZ"/>
                     </connections>
                 </viewController>
