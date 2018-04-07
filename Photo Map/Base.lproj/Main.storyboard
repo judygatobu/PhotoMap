@@ -26,17 +26,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="camera" highlightedImage="camera" translatesAutoresizingMaskIntoConstraints="NO" id="Dgu-70-8oe">
-                                <rect key="frame" x="136" y="546" width="102" height="101"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Exb-9j-JdN">
+                                <rect key="frame" x="137" y="551" width="102" height="86"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="camera"/>
+                                <connections>
+                                    <action selector="CameraButton:" destination="ghP-Ww-KKQ" eventType="touchUpInside" id="XTN-bz-yMP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="aPF-0T-Ydb"/>
                     <connections>
                         <outlet property="MapView" destination="aKy-Uk-sZQ" id="Dw3-v4-hTs"/>
-                        <outlet property="cameraButton" destination="Dgu-70-8oe" id="dsy-mQ-5PW"/>
+                        <outlet property="cameraButton" destination="Exb-9j-JdN" id="MMy-hR-q8M"/>
                         <segue destination="eZf-Nb-6PU" kind="push" identifier="tagSegue" id="Tzv-N2-17x"/>
                         <segue destination="WeT-38-qba" kind="push" identifier="fullImageSegue" id="B5X-dM-HfZ"/>
                     </connections>

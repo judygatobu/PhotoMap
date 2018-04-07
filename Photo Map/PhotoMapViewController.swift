@@ -17,8 +17,32 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var MapView: MKMapView!
 
      var photoAnotation:PhotoAnnotation?
-    @IBOutlet weak var cameraButton: UIImageView!
+ 
+    @IBAction func CameraButton(_ sender: Any) {
+        
+        
+        let vc = UIImagePickerController()
+        vc.delegate = self
+        vc.allowsEditing = true
+        vc.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        
+        //   self.present(vc, animated: true, completion: nil)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            print("Camera is available 📸")
+            vc.sourceType = .camera
+        } else {
+            print("Camera 🚫 available so we will use photo library instead")
+            vc.sourceType = .photoLibrary
+        }
+        
+        self.present(vc, animated: true, completion: nil)
 
+        
+        
+    }
+
+    @IBOutlet var cameraButton: UIButton!
     
     var image: UIImage!
     
@@ -35,7 +59,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         
         // Set up the camera button //
         cameraButton.layer.masksToBounds = true;
-        cameraButton.layer.cornerRadius = 50;
+        cameraButton.layer.cornerRadius = 25;
         cameraButton.layer.borderWidth = 3
         cameraButton.backgroundColor = UIColor.clear;
         cameraButton.layer.borderColor = UIColor.white.cgColor;
@@ -46,27 +70,15 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
     
     
-  // action  @IBOutlet weak var camera: UIImageView!
+
     
     
-        let vc = UIImagePickerController()
-        vc.delegate = self
-        vc.allowsEditing = true
-        vc.sourceType = UIImagePickerControllerSourceType.photoLibrary
-
-     //   self.present(vc, animated: true, completion: nil)
-
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            print("Camera is available 📸")
-            vc.sourceType = .camera
-        } else {
-            print("Camera 🚫 available so we will use photo library instead")
-            vc.sourceType = .photoLibrary
-}
-
-        self.present(vc, animated: true, completion: nil)
-
     }
+    
+    
+    
+    
+    
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -125,13 +137,16 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
-        //      self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
         
-        // Get the first view controller in the navigation controller's collection -
-        // This is the root view controller
-        //   self.navigationController?.popToViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
         
-        //  navigationController!.popToViewController(navigationController!.viewControllers[2] as! LocationsViewController, animated: false)
+        
+        let locationCoordinate = CLLocationCoordinate2D(latitude: latitude as! Double, longitude: longitude as! Double)
+        
+        //  save image and coordonate
+        self.photoAnotation = PhotoAnnotation(photo: self.image!, coordinate: locationCoordinate, title: "cool")
+        
+        self.addAnnotationAtCoordinate(coordinate: locationCoordinate)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
