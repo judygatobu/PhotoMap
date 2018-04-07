@@ -1,6 +1,6 @@
 # Lab 6 - *PhotoMap*
 
-**Name of your app** is an app that allows the user to search for locations using the [Foursquare API](https://developer.foursquare.com/docs) and create a pin with an image annotation.
+**PhotoMap** is an app that allows the user to search for locations using the [Foursquare API](https://developer.foursquare.com/docs) and create a pin with an image annotation.
 
 Time spent: 7 hours spent in total
 
@@ -8,10 +8,10 @@ Time spent: 7 hours spent in total
 
 The following **required** user stories are complete:
 
-- [ ] User can view a map (+2pt)
-- [ ] User can take a photo (+1pt)
-- [ ] User can tag a location (+1pt)
-- [ ] User can drop a pin with image annotation (+1pt)
+- [x] User can view a map (+2pt)
+- [x] User can take a photo (+1pt)
+- [x] User can tag a location (+1pt)
+- [x] User can drop a pin with image annotation (+1pt)
 
 The following **stretch** user stories are implemented:
 
@@ -29,7 +29,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://cdn.fbsbx.com/v/t59.2708-21/30071191_10208782264912501_6427138930323226624_n.gif?_nc_cat=0&oh=6f3d86f6364f20abb762220eab882a66&oe=5ACA1DED' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
